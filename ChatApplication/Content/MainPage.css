@@ -1,0 +1,13 @@
+﻿#messages_wrapper{
+    border-style: solid;
+    border-color: darkgray;
+    border-width:medium;
+}
+#messages{
+    width:50%;
+    float:left;
+}
+#contacts{
+    width:50%;
+    float:left;
+}
