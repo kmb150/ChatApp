@@ -226,6 +226,10 @@
     <Compile Include="Migrations\201811260906168_DisplayName.Designer.cs">
       <DependentUpon>201811260906168_DisplayName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812052315004_ImageUrl.cs" />
+    <Compile Include="Migrations\201812052315004_ImageUrl.Designer.cs">
+      <DependentUpon>201812052315004_ImageUrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Contact.cs" />
@@ -334,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811260906168_DisplayName.resx">
       <DependentUpon>201811260906168_DisplayName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812052315004_ImageUrl.resx">
+      <DependentUpon>201812052315004_ImageUrl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

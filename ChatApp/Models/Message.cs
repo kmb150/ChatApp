@@ -14,6 +14,12 @@ namespace ChatApp.Models
         public DateTime Date { get; set; }
         public int FromUser { get; set; }
         public int ToUser { get; set; }
+
+        public void AddMessage(MessagesContext db)
+        {
+            db.Messages.Add(this);
+        }
+
     }
 
 }

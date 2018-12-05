@@ -12,6 +12,7 @@ namespace ChatApp.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
+        public string ImageUrl { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -19,6 +20,14 @@ namespace ChatApp.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+
+        public string GetImageUrl()
+        {
+            if (ImageUrl == "" || ImageUrl is null)
+                return "http://www.letbuymark.com/profile/NoProfile.jpg";
+            else
+                return ImageUrl;
         }
     }
 

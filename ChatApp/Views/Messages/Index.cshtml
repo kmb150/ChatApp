@@ -3,10 +3,8 @@
 @{
     ViewBag.Title = "Chat";
 }
-<h2>Chat</h2>
-<div class="container">
-    @Html.Partial("Contacts", Model)
-</div>
+
+@Html.Partial("Contacts", Model)
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
@@ -23,9 +21,9 @@
         }
 
         function changeReceiver(element) {
-            $("#receiver_header").text(element.textContent);
+            $("#receiver_header").text($(".name",element).text());
             console.log(element.value);
-            $("#targetname").val(element.childNodes[1].value);
+            $("#targetname").val($(".glyphicon-envelope",element).attr("title"));
         }
         
         $(function () {
