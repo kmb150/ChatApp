@@ -16,7 +16,7 @@ namespace ChatApp
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Chat", id = UrlParameter.Optional }
+                defaults: new { controller = "Messages", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

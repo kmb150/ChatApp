@@ -1,0 +1,26 @@
+﻿.icons{
+    min-width:24px;
+    text-align:center;
+}
+.icons::before{
+    min-width:24px;
+    font-size:22px;
+}
+.icons-list{
+    list-style:none;
+    display:inline;
+}
+.icons-list>li{
+    display:inline;
+}
+#contacts{
+    height:500px;
+    overflow:hidden;
+}
+#contact-list{
+    width:100%;
+    height:85%;
+    overflow-y:scroll;
+    padding-right:17px;
+    box-sizing:content-box;
+}

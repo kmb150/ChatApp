@@ -1,25 +1,11 @@
-﻿
+﻿@model ChatApp.Models.ContactsAndMessages
+
 @{
     ViewBag.Title = "Chat";
 }
 <h2>Chat</h2>
 <div class="container">
-
-
-    <div class="col-sm-3 col-sm-offset-4 frame">
-        <ul id="messages"></ul>
-        <div>
-            <div class="msj-rta macro">
-                <div class="text text-r" style="background:whitesmoke !important">
-                    <input id="message" class="mytext" placeholder="Type a message" />
-                    <input type="hidden" id="displayname" />
-                </div>
-            </div>
-            <div id="sendmessage" style="padding:10px;">
-                <span class="glyphicon glyphicon-share-alt"></span>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Contacts", Model)
 </div>
 
 @section scripts {
@@ -29,29 +15,43 @@
     <script src="~/Scripts/chat-script.js"></script>
 
     <script>
+        function addContact() {
+            var username = prompt("Enter the username of the contact");
+            document.getElementById("contact_username").value = username;
+            document.getElementById("add_contact_form").submit();
+
+        }
+
+        function changeReceiver(element) {
+            $("#receiver_header").text(element.textContent);
+            console.log(element.value);
+            $("#targetname").val(element.childNodes[1].value);
+        }
+        
         $(function () {
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
             // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (name, message) {
+            chat.client.appendNewMessage = function (name, message) {
                 // Add the message to the page.
                 if (name == $('#displayname').val()) {
                     insertChat("me", message, 0);
                 }
-                else {
+                else if(name == $('#targetname').val()){
                     insertChat("you", message, 0);
                 }
-
+                
             };
             // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
+            $('#displayname').val("@Context.User.Identity.Name");
             // Set initial focus to message input box.
             $('#message').focus();
             // Start the connection.
             $.connection.hub.start().done(function () {
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val());
+                    if ($('#targetname').val() != "")
+                        chat.server.send($('#targetname').val(), $('#message').val());
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
                 });
@@ -59,7 +59,8 @@
                     if (e.which == 13) {
                         console.log("sendmessage keydown");
                         // Call the Send method on the hub.
-                        chat.server.send($('#displayname').val(), $('#message').val());
+                        if ($('#targetname').val()!="")
+                            chat.server.send($('#targetname').val(), $('#message').val());
                         // Clear text box and reset focus for next comment.
                         $('#message').val('').focus();
                     }

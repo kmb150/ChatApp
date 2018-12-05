@@ -7,17 +7,52 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ChatApp.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ChatApp.Controllers
 {
     public class MessagesController : Controller
     {
         private MessagesContext db = new MessagesContext();
+        private ContactsContext contactsContext = new ContactsContext();
+        private ContactsAndMessages contactsAndMessages;
+
+        protected ApplicationDbContext ApplicationDbContext { get; set; }
+        
+        protected UserManager<ApplicationUser> UserManager { get; set; }
 
         // GET: Messages
         public ActionResult Index()
         {
-            return View(db.Messages.ToList());
+            this.ApplicationDbContext = new ApplicationDbContext();
+            this.UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.ApplicationDbContext));
+            string currentUserId = User.Identity.GetUserId();
+            contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
+
+            return View(contactsAndMessages);
+        }
+        [HttpPost]
+        public ActionResult Index(string username)
+        {
+            this.ApplicationDbContext = new ApplicationDbContext();
+            this.UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.ApplicationDbContext));
+            string currentUserId = User.Identity.GetUserId();
+
+            ApplicationUser contactUser = UserManager.Users.Where(x => x.Email == username).FirstOrDefault();
+            AddContact(contactUser.Id, currentUserId);
+            contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
+
+            Response.Write("console.log('into posted index')");
+            return View(contactsAndMessages);
+        }
+
+        private void AddContact(string id, string currentUserId)
+        {
+            Contact newContact = new Contact();
+            newContact.UserId = currentUserId;
+            newContact.ContactId = id;
+            newContact.AddContact(contactsContext);
         }
 
         // GET: Messages/Details/5

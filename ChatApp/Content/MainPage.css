@@ -10,6 +10,14 @@
 }
 
 #contacts {
-    width: 50%;
     float: left;
+    height:400px;
+    margin-top:40px !important;
+}
+input[type="button"]{
+    cursor:pointer !important;
+    z-index:9999;
+}
+contacts_wrapper{
+    position:relative;
 }
