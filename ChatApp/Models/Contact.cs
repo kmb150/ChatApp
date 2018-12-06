@@ -72,19 +72,18 @@ namespace ChatApp.Models
         public List<Message> Messages { get; set; }
         public ApplicationUser SelectedContact { get; set; }
 
-        public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb, string selectedContactId)
+        public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb, string selectedContactUsername)
         {
             MessagesContext messagesDb = new MessagesContext();
             this.Contacts = new UserContacts(currentUserId,contactsDb,identityDb);
-            this.Messages = messagesDb.Messages.Where(x => x.FromUser == currentUserId || x.ToUser == currentUserId).ToList();
-            SelectedContact = new ApplicationUser();
-            SelectedContact.UserName = selectedContactId;
+            SelectedContact= identityDb.Users.Where(x => x.UserName == selectedContactUsername).FirstOrDefault();
+            this.Messages = messagesDb.Messages.Where(x => (x.FromUser == currentUserId && x.ToUser == SelectedContact.Id) || (x.FromUser == SelectedContact.Id && x.ToUser == currentUserId)).ToList();
         }
         public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb)
         {
             MessagesContext messagesDb = new MessagesContext();
             this.Contacts = new UserContacts(currentUserId, contactsDb, identityDb);
-            this.Messages = messagesDb.Messages.Where(x => x.FromUser == currentUserId || x.ToUser == currentUserId).ToList();
+            this.Messages = new List<Message>();
         }
         public ContactsAndMessages()
         {

@@ -31,7 +31,7 @@ namespace ChatApp.Controllers
             if (TempData["cam"] != null)
             {
                 contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager,((ContactsAndMessages)TempData["cam"]).SelectedContact.UserName);
-                contactsAndMessages.SelectedContact= ApplicationDbContext.Users.Where(x => x.UserName == contactsAndMessages.SelectedContact.UserName).FirstOrDefault();
+                //contactsAndMessages.SelectedContact= ApplicationDbContext.Users.Where(x => x.UserName == contactsAndMessages.SelectedContact.UserName).FirstOrDefault();
             }
             else
             {
