@@ -28,8 +28,17 @@ namespace ChatApp.Controllers
             this.ApplicationDbContext = new ApplicationDbContext();
             this.UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this.ApplicationDbContext));
             string currentUserId = User.Identity.GetUserId();
-            contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
-
+            if (TempData["cam"] != null)
+            {
+                contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager,((ContactsAndMessages)TempData["cam"]).SelectedContact.UserName);
+                contactsAndMessages.SelectedContact= ApplicationDbContext.Users.Where(x => x.UserName == contactsAndMessages.SelectedContact.UserName).FirstOrDefault();
+            }
+            else
+            {
+                contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
+            }
+            
+            
             return View(contactsAndMessages);
         }
         [HttpPost]
@@ -42,14 +51,22 @@ namespace ChatApp.Controllers
             ApplicationUser contactUser = UserManager.Users.Where(x => x.Email == username).FirstOrDefault();
             AddContact(contactUser.Id, currentUserId);
             contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
-
-            Response.Write("console.log('into posted index')");
+            
+            //Response.Write("console.log('into posted index')");
             return View(contactsAndMessages);
+        }
+
+        [HttpPost]
+        public ActionResult Index2(ContactsAndMessages contactsAndMessages)
+        {
+            
+            TempData["cam"] = contactsAndMessages;
+            return RedirectToAction("Index","Messages");
         }
 
         private void AddContact(string id, string currentUserId)
         {
-            Contact newContact = new Contact();
+            Contact newContact = new Contact("","");
             newContact.UserId = currentUserId;
             newContact.ContactId = id;
             newContact.AddContact(contactsContext);

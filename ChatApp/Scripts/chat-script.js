@@ -1,9 +1,4 @@
-﻿var me = {};
-me.avatar = "https://upload.wikimedia.org/wikipedia/commons/d/de/Me_bank_logo15.png";
-
-var you = {};
-you.avatar = "https://static.thenounproject.com/png/545083-200.png";
-
+﻿
 function formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();
@@ -18,20 +13,19 @@ function formatAMPM(date) {
 
 
 //-- No use time. It is a javaScript effect.
-function insertChat(who, text, time) {
+function insertChat(who, text, time, avatar,name,date) {
     if (time === undefined) {
         time = 0;
     }
     var control = "";
-    var date = formatAMPM(new Date());
 
     if (who === "me") {
         control = '<li style="width:100%">' +
             '<div class="msj macro">' +
-            '<div class="avatar"><img class="img-circle" style="width:100%;" src="' + me.avatar + '" /></div>' +
+            '<div class="avatar"><img class="img-circle" style="width:100%;" src="' + avatar + '" /></div>' +
             '<div class="text text-l">' +
             '<p>' + text + '</p>' +
-            '<p><small>' + date + '</small></p>' +
+            '<p class="align-left"><small>' +name+" "+ date + '</small></p>' +
             '</div>' +
             '</div>' +
             '</li>';
@@ -40,9 +34,9 @@ function insertChat(who, text, time) {
             '<div class="msj-rta macro">' +
             '<div class="text text-r">' +
             '<p>' + text + '</p>' +
-            '<p><small>' + date + '</small></p>' +
+            '<p><small>' + date + " " + name + '</small></p>' +
             '</div>' +
-            '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" style="width:100%;" src="' + you.avatar + '" /></div>' +
+            '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" style="width:100%;" src="' + avatar + '" /></div>' +
             '</li>';
     }
     setTimeout(

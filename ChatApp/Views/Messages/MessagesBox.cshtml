@@ -1,13 +1,15 @@
 ﻿@model ChatApp.Models.ContactsAndMessages
 <div class="col-sm-5 frame">
-    <h3 class="text-center" id="receiver_header"></h3>
+    <h3 class="text-center" id="receiver_header">@if (Model.SelectedContact != null)
+    {@Model.SelectedContact.DisplayName;
+} </h3>
     <ul id="messages"></ul>
     <div>
         <div class="msj-rta macro">
             <div class="text text-r" style="background:whitesmoke !important">
                 <input id="message" class="mytext" placeholder="Type a message" />
                 <input type="hidden" id="displayname" />
-                <input type="hidden" id="targetname" />
+                <input type="hidden" id="targetname" value="@if (Model.SelectedContact != null) { @Model.SelectedContact.UserName; }" />
             </div>
         </div>
         <div id="sendmessage" style="padding:10px;">

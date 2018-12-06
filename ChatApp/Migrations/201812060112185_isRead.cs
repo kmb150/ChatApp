@@ -3,16 +3,16 @@ namespace ChatApp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ImageUrl : DbMigration
+    public partial class isRead : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.AspNetUsers", "ImageUrl", c => c.String());
+            AddColumn("dbo.Messages", "IsRead", c => c.Boolean(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.AspNetUsers", "ImageUrl");
+            DropColumn("dbo.Messages", "IsRead");
         }
     }
 }

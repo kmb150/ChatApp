@@ -29,6 +29,17 @@ namespace ChatApp.Models
             contactsContext.Contacts.Remove(this);
             contactsContext.SaveChanges();
         }
+
+        public Contact(string UserId,string ConcactId)
+        {
+            this.UserId = UserId;
+            this.ContactId = ContactId;
+        }
+        public Contact()
+        {
+            this.UserId = "";
+            this.ContactId = "";
+        }
     }
     public class ContactsContext: DbContext
     {
@@ -37,17 +48,20 @@ namespace ChatApp.Models
 
     public class UserContacts
     {
-        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
         public List<ApplicationUser> Contacts { get; set; }
 
         public UserContacts(string currentUserId, ContactsContext contactsDb,UserManager<ApplicationUser> identityDb)
         {
-            this.UserId = currentUserId;
-            var contactsId=contactsDb.Contacts.Where(x => x.UserId == UserId);
-            Contacts = new List<ApplicationUser>();
-            foreach(var contact in contactsId)
+            if (currentUserId != null)
             {
-                Contacts.Add(identityDb.Users.Where(x => x.Id == contact.ContactId).FirstOrDefault());
+                this.User = identityDb.Users.Where(x => x.Id == currentUserId).FirstOrDefault();
+                var contactsId = contactsDb.Contacts.Where(x => x.UserId == User.Id);
+                Contacts = new List<ApplicationUser>();
+                foreach (var contact in contactsId)
+                {
+                    Contacts.Add(identityDb.Users.Where(x => x.Id == contact.ContactId).FirstOrDefault());
+                }
             }
         }
     }
@@ -56,15 +70,35 @@ namespace ChatApp.Models
     {
         public UserContacts Contacts { get; set; }
         public List<Message> Messages { get; set; }
+        public ApplicationUser SelectedContact { get; set; }
 
+        public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb, string selectedContactId)
+        {
+            MessagesContext messagesDb = new MessagesContext();
+            this.Contacts = new UserContacts(currentUserId,contactsDb,identityDb);
+            this.Messages = messagesDb.Messages.Where(x => x.FromUser == currentUserId || x.ToUser == currentUserId).ToList();
+            SelectedContact = new ApplicationUser();
+            SelectedContact.UserName = selectedContactId;
+        }
         public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb)
         {
-            this.Contacts = new UserContacts(currentUserId,contactsDb,identityDb);
-            this.Messages = new List<Message>();
+            MessagesContext messagesDb = new MessagesContext();
+            this.Contacts = new UserContacts(currentUserId, contactsDb, identityDb);
+            this.Messages = messagesDb.Messages.Where(x => x.FromUser == currentUserId || x.ToUser == currentUserId).ToList();
         }
         public ContactsAndMessages()
         {
 
+        }
+
+        public string GetImageByContactUsername(string username)
+        {
+            foreach(var user in Contacts.Contacts)
+            {
+                if (user.UserName == username)
+                    return user.ImageUrl;
+            }
+            return "";
         }
     }
 

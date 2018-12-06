@@ -7,13 +7,13 @@ namespace ChatApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class FirstName : IMigrationMetadata
+    public sealed partial class ChangeType : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstName));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangeType));
         
         string IMigrationMetadata.Id
         {
-            get { return "201811260903409_FirstName"; }
+            get { return "201812060228398_ChangeType"; }
         }
         
         string IMigrationMetadata.Source

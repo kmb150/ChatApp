@@ -3,7 +3,10 @@
 @{
     ViewBag.Title = "Chat";
 }
+<form  method="post" id="add_contact_form">
 
+    <input type="text" hidden id="contact_username" name="username" />
+</form>
 @Html.Partial("Contacts", Model)
 
 @section scripts {
@@ -13,32 +16,64 @@
     <script src="~/Scripts/chat-script.js"></script>
 
     <script>
+        var targetUrl = "";
+
+        resetChat();
+        @if(Model.SelectedContact != null)
+        {
+            <text>reloadMessages();</text>
+        }
         function addContact() {
             var username = prompt("Enter the username of the contact");
             document.getElementById("contact_username").value = username;
+            alert(document.getElementById("contact_username").value);
             document.getElementById("add_contact_form").submit();
+            
 
         }
 
         function changeReceiver(element) {
             $("#receiver_header").text($(".name",element).text());
             console.log(element.value);
-            $("#targetname").val($(".glyphicon-envelope",element).attr("title"));
+            $("#targetname").val($(".glyphicon-envelope", element).attr("title"));
+            targetUrl = $(".image-circle", element).attr("src");
+
+            $(".selectContactForm input").val($("#targetname").val());
+            console.log($(".selectContactForm input").val() + "," + $("#targetname").val());
+            $(".selectContactForm").submit();
+
         }
-        
+
+        function reloadMessages() {
+            @foreach (var message in Model.Messages)
+            {
+                if (Model.SelectedContact != null)
+                {
+                    if (Model.SelectedContact.Id != message.FromUser)
+                    {
+                        <text>insertChat("me",'@message.Text',0,'@Model.Contacts.User.GetImageUrl()','@Model.Contacts.User.DisplayName','@message.GetFormattedDate()')</text>
+                    }
+                    else
+                    {
+                        <text>insertChat("you",'@message.Text',0, '@Model.SelectedContact.GetImageUrl()','@Model.SelectedContact.DisplayName','@message.GetFormattedDate()');</text>
+                    }
+                }
+            }
+        }
+
         $(function () {
             // Reference the auto-generated proxy for the hub.
             var chat = $.connection.chatHub;
             // Create a function that the hub can call back to display messages.
-            chat.client.appendNewMessage = function (name, message) {
+            chat.client.appendNewMessage = function (name, message, date) {
                 // Add the message to the page.
                 if (name == $('#displayname').val()) {
-                    insertChat("me", message, 0);
+                    insertChat("me", message, 0,'@if (@Model.Contacts.User != null) { @Model.Contacts.User.GetImageUrl() <text>','</text> @Model.Contacts.User.DisplayName}',date);
                 }
                 else if(name == $('#targetname').val()){
-                    insertChat("you", message, 0);
+                    insertChat("you", message, 0,'@if (Model.SelectedContact != null) { @Model.SelectedContact.GetImageUrl() <text>','</text> @Model.SelectedContact.DisplayName}',date);
                 }
-                
+
             };
             // Get the user name and store it to prepend to messages.
             $('#displayname').val("@Context.User.Identity.Name");

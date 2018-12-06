@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ChatApp.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ChatApp.Controllers
 {
@@ -64,15 +65,42 @@ namespace ChatApp.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var appUser = UserManager.FindById(userId);
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                PhoneNumber = appUser.PhoneNumber,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                DisplayName = appUser.DisplayName,
+                ImageUrl=appUser.ImageUrl
+
             };
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(IndexViewModel indexModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(indexModel);
+            }
+            var store = new UserStore<ApplicationUser>(new ApplicationDbContext());
+            var manager = new UserManager<ApplicationUser>(store);
+            var currentUser = manager.FindById(User.Identity.GetUserId());
+            currentUser.FirstName = indexModel.FirstName;
+            currentUser.LastName = indexModel.LastName;
+            currentUser.DisplayName = indexModel.DisplayName;
+            currentUser.PhoneNumber = indexModel.PhoneNumber;
+            currentUser.ImageUrl = indexModel.ImageUrl;
+            indexModel.HasPassword = true;
+           
+            await manager.UpdateAsync(currentUser);
+            var ctx = store.Context;
+            ctx.SaveChanges();
+            return View(indexModel);
         }
 
         //
