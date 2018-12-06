@@ -49,8 +49,25 @@ namespace ChatApp.Controllers
             string currentUserId = User.Identity.GetUserId();
 
             ApplicationUser contactUser = UserManager.Users.Where(x => x.Email == username).FirstOrDefault();
-            AddContact(contactUser.Id, currentUserId);
             contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
+            if (contactUser == null)
+            {
+                contactsAndMessages.ErrorMessage = "A user with such username does not exist!";
+            }
+            else
+            {
+                Contact contact = contactsContext.Contacts.Where(x => x.UserId == contactUser.Id).FirstOrDefault();
+                if (contact != null)
+                {
+                    contactsAndMessages.ErrorMessage = "The user you are trying to add is already in your contacts list!";
+                }
+                else
+                {
+                    AddContact(contactUser.Id, currentUserId);
+                }
+                
+            }
+            
             
             //Response.Write("console.log('into posted index')");
             return View(contactsAndMessages);

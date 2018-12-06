@@ -71,6 +71,7 @@ namespace ChatApp.Models
         public UserContacts Contacts { get; set; }
         public List<Message> Messages { get; set; }
         public ApplicationUser SelectedContact { get; set; }
+        public string ErrorMessage { get; set; }
 
         public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb, string selectedContactUsername)
         {
