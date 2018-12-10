@@ -210,13 +210,25 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Migrations\201812060112185_isRead.cs" />
-    <Compile Include="Migrations\201812060112185_isRead.Designer.cs">
-      <DependentUpon>201812060112185_isRead.cs</DependentUpon>
+    <Compile Include="Migrations\201811260840370_InitialCreate.cs" />
+    <Compile Include="Migrations\201811260840370_InitialCreate.Designer.cs">
+      <DependentUpon>201811260840370_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201812060228398_ChangeType.cs" />
-    <Compile Include="Migrations\201812060228398_ChangeType.Designer.cs">
-      <DependentUpon>201812060228398_ChangeType.cs</DependentUpon>
+    <Compile Include="Migrations\201811260903409_FirstName.cs" />
+    <Compile Include="Migrations\201811260903409_FirstName.Designer.cs">
+      <DependentUpon>201811260903409_FirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811260905455_LastName.cs" />
+    <Compile Include="Migrations\201811260905455_LastName.Designer.cs">
+      <DependentUpon>201811260905455_LastName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811260906168_DisplayName.cs" />
+    <Compile Include="Migrations\201811260906168_DisplayName.Designer.cs">
+      <DependentUpon>201811260906168_DisplayName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812052315004_ImageUrl.cs" />
+    <Compile Include="Migrations\201812052315004_ImageUrl.Designer.cs">
+      <DependentUpon>201812052315004_ImageUrl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -315,11 +327,20 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812060112185_isRead.resx">
-      <DependentUpon>201812060112185_isRead.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811260840370_InitialCreate.resx">
+      <DependentUpon>201811260840370_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812060228398_ChangeType.resx">
-      <DependentUpon>201812060228398_ChangeType.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811260903409_FirstName.resx">
+      <DependentUpon>201811260903409_FirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811260905455_LastName.resx">
+      <DependentUpon>201811260905455_LastName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811260906168_DisplayName.resx">
+      <DependentUpon>201811260906168_DisplayName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812052315004_ImageUrl.resx">
+      <DependentUpon>201812052315004_ImageUrl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

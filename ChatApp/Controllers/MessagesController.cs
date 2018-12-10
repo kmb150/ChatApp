@@ -19,7 +19,7 @@ namespace ChatApp.Controllers
         private ContactsAndMessages contactsAndMessages;
 
         protected ApplicationDbContext ApplicationDbContext { get; set; }
-        
+
         protected UserManager<ApplicationUser> UserManager { get; set; }
 
         // GET: Messages
@@ -30,15 +30,15 @@ namespace ChatApp.Controllers
             string currentUserId = User.Identity.GetUserId();
             if (TempData["cam"] != null)
             {
-                contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager,((ContactsAndMessages)TempData["cam"]).SelectedContact.UserName);
+                contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager, ((ContactsAndMessages)TempData["cam"]).SelectedContact.UserName);
                 //contactsAndMessages.SelectedContact= ApplicationDbContext.Users.Where(x => x.UserName == contactsAndMessages.SelectedContact.UserName).FirstOrDefault();
             }
             else
             {
                 contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
             }
-            
-            
+
+
             return View(contactsAndMessages);
         }
         [HttpPost]
@@ -56,7 +56,7 @@ namespace ChatApp.Controllers
             }
             else
             {
-                Contact contact = contactsContext.Contacts.Where(x => x.UserId  == currentUserId && x.ContactId == contactUser.Id).FirstOrDefault();
+                Contact contact = contactsContext.Contacts.Where(x => x.UserId == currentUserId && x.ContactId == contactUser.Id).FirstOrDefault();
                 if (contact != null)
                 {
                     contactsAndMessages.ErrorMessage = "The user you are trying to add is already in your contacts list!";
@@ -66,10 +66,10 @@ namespace ChatApp.Controllers
                     AddContact(contactUser.Id, currentUserId);
                     contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
                 }
-                
+
             }
-            
-            
+
+
             //Response.Write("console.log('into posted index')");
             return View(contactsAndMessages);
         }
@@ -77,9 +77,9 @@ namespace ChatApp.Controllers
         [HttpPost]
         public ActionResult Index2(ContactsAndMessages contactsAndMessages)
         {
-            
+
             TempData["cam"] = contactsAndMessages;
-            return RedirectToAction("Index","Messages");
+            return RedirectToAction("Index", "Messages");
         }
 
         [HttpPost]
@@ -92,7 +92,7 @@ namespace ChatApp.Controllers
 
         private void AddContact(string id, string currentUserId)
         {
-            Contact newContact = new Contact("","");
+            Contact newContact = new Contact("", "");
             newContact.UserId = currentUserId;
             newContact.ContactId = id;
             newContact.AddContact(contactsContext);
@@ -167,8 +167,8 @@ namespace ChatApp.Controllers
             return View(message);
         }
 
-        
-        
+
+
 
         protected override void Dispose(bool disposing)
         {
