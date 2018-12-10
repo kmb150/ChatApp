@@ -4,7 +4,6 @@
     ViewBag.Title = "Chat";
 }
 <form  method="post" id="add_contact_form">
-
     <input type="text" hidden id="contact_username" name="username" />
 </form>
 @Html.Partial("Contacts", Model)
@@ -18,6 +17,10 @@
     <script>
         var targetUrl = "";
 
+        $(".contacts-small").click(function () {
+            $(".contacts-wrapper").hasClass("shown") ? $(".contacts-wrapper").removeClass("shown") : $(".contacts-wrapper").addClass("shown");
+        });
+
         resetChat();
         @if(Model.SelectedContact != null)
         {
@@ -28,7 +31,15 @@
             document.getElementById("contact_username").value = username;
             //alert(document.getElementById("contact_username").value);
             document.getElementById("add_contact_form").submit();
+            console.log("parent_blah");
             
+        }
+
+        function removeContact(id, event) {
+            event.stopPropagation();
+            $("#contact_id").val(id);
+            $(".delete_contact_form").submit();
+            console.log("blah");
         }
 
         function changeReceiver(element) {
@@ -39,7 +50,8 @@
 
             $(".selectContactForm input").val($("#targetname").val());
             console.log($(".selectContactForm input").val() + "," + $("#targetname").val());
-            $(".selectContactForm").submit();
+            $(".contacts-wrapper").removeClass("shown");
+            setTimeout($(".selectContactForm").submit(), 600);
 
         }
 
@@ -56,6 +68,7 @@
                     {
                         <text>insertChat("you",'@message.Text',0, '@Model.SelectedContact.GetImageUrl()','@Model.SelectedContact.DisplayName','@message.GetFormattedDate()');</text>
                     }
+
                 }
             }
         }
@@ -67,10 +80,13 @@
             chat.client.appendNewMessage = function (name, message, date) {
                 // Add the message to the page.
                 if (name == $('#displayname').val()) {
-                    insertChat("me", message, 0,'@if (@Model.Contacts.User != null) { @Model.Contacts.User.GetImageUrl() <text>','</text> @Model.Contacts.User.DisplayName}',date);
+                    insertChat("me", message, 0, '@if (@Model.Contacts.User != null) { @Model.Contacts.User.GetImageUrl() <text>', '</text> @Model.Contacts.User.DisplayName}', date);
                 }
-                else if(name == $('#targetname').val()){
-                    insertChat("you", message, 0,'@if (Model.SelectedContact != null) { @Model.SelectedContact.GetImageUrl() <text>','</text> @Model.SelectedContact.DisplayName}',date);
+                else if (name == $('#targetname').val()) {
+                    insertChat("you", message, 0, '@if (Model.SelectedContact != null) { @Model.SelectedContact.GetImageUrl() <text>', '</text> @Model.SelectedContact.DisplayName}', date);
+                }
+                else {
+                    document.getElementsByClassName(String(name))[0].classList.add("unread");
                 }
 
             };

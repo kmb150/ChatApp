@@ -47,7 +47,7 @@ namespace ChatApp.Models
             }
             if(Date.Day > DateTime.Now.AddDays(-6).Day)
             {
-                return Date.ToString("ddd at H:mm");
+                return Date.ToString("ddd 'at' H:mm");
             }
             else
             {

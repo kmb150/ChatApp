@@ -10,7 +10,7 @@ namespace ChatApp.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Messages");
         }
 
         public ActionResult About()

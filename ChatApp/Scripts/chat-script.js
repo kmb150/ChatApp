@@ -11,7 +11,6 @@ function formatAMPM(date) {
 }
 
 
-
 //-- No use time. It is a javaScript effect.
 function insertChat(who, text, time, avatar,name,date) {
     if (time === undefined) {
@@ -20,9 +19,9 @@ function insertChat(who, text, time, avatar,name,date) {
     var control = "";
 
     if (who === "me") {
-        control = '<li style="width:100%">' +
+        control = '<li style="width:100%; margin:5px 0;">' +
             '<div class="msj macro">' +
-            '<div class="avatar"><img class="img-circle" style="width:100%;" src="' + avatar + '" /></div>' +
+            '<div class="avatar"><img class="img-circle" src="' + avatar + '" /></div>' +
             '<div class="text text-l">' +
             '<p>' + text + '</p>' +
             '<p class="align-left"><small>' +name+" "+ date + '</small></p>' +
@@ -30,13 +29,13 @@ function insertChat(who, text, time, avatar,name,date) {
             '</div>' +
             '</li>';
     } else {
-        control = '<li style="width:100%;">' +
+        control = '<li style="width:100%; margin:5px 0;">' +
             '<div class="msj-rta macro">' +
             '<div class="text text-r">' +
             '<p>' + text + '</p>' +
             '<p><small>' + date + " " + name + '</small></p>' +
             '</div>' +
-            '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" style="width:100%;" src="' + avatar + '" /></div>' +
+            '<div class="avatar" style="padding:0px 0px 0px 10px !important"><img class="img-circle" src="' + avatar + '" /></div>' +
             '</li>';
     }
     setTimeout(
@@ -73,7 +72,7 @@ $(function () {
     $('#contact-list').searchable({
         searchField: '#contact-list-search',
         selector: 'li',
-        childSelector: '.col-xs-12',
+        childSelector: '.contact-details-small',
         show: function (elem) {
             elem.slideDown(100);
         },

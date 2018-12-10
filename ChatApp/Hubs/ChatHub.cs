@@ -23,7 +23,6 @@ namespace ChatApp.Hubs
             
             if (who!="")
             {
-                
                 Message messageObj = new Message(message,DateTime.Now,Context.User.Identity.GetUserId(),receiverId);
                 MessagesContext db = new MessagesContext();
                 messageObj.AddMessage(db);
@@ -37,9 +36,7 @@ namespace ChatApp.Hubs
         public override Task OnConnected()
         {
             string name = Context.User.Identity.Name;
-
             Groups.Add(Context.ConnectionId, name);
-
             return base.OnConnected();
         }
     }

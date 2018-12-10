@@ -26,11 +26,12 @@ namespace ChatApp.Models
 
         public void DeleteContact(ContactsContext contactsContext)
         {
+            contactsContext.Contacts.Attach(this);
             contactsContext.Contacts.Remove(this);
             contactsContext.SaveChanges();
         }
 
-        public Contact(string UserId,string ConcactId)
+        public Contact(string UserId,string ContactId)
         {
             this.UserId = UserId;
             this.ContactId = ContactId;
@@ -39,6 +40,18 @@ namespace ChatApp.Models
         {
             this.UserId = "";
             this.ContactId = "";
+        }
+
+        public bool HasUnread()
+        {
+            MessagesContext db = new MessagesContext();
+            var messages = db.Messages.Where(x => x.FromUser == UserId && x.ToUser == ContactId);
+            foreach (Message mes in messages)
+            {
+                if (mes.IsRead == false)
+                    return true;
+            }
+            return false;
         }
     }
     public class ContactsContext: DbContext
@@ -64,6 +77,10 @@ namespace ChatApp.Models
                 }
             }
         }
+
+        
+
+        
     }
 
     public class ContactsAndMessages
@@ -73,12 +90,22 @@ namespace ChatApp.Models
         public ApplicationUser SelectedContact { get; set; }
         public string ErrorMessage { get; set; }
 
+        public bool HasUnreadMessages(string contactId)
+        {
+            Contact contact = new Contact(contactId, Contacts.User.Id);
+            if (contact.HasUnread())
+                return true;
+            else
+                return false;
+        }
+
         public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb, string selectedContactUsername)
         {
             MessagesContext messagesDb = new MessagesContext();
             this.Contacts = new UserContacts(currentUserId,contactsDb,identityDb);
             SelectedContact= identityDb.Users.Where(x => x.UserName == selectedContactUsername).FirstOrDefault();
             this.Messages = messagesDb.Messages.Where(x => (x.FromUser == currentUserId && x.ToUser == SelectedContact.Id) || (x.FromUser == SelectedContact.Id && x.ToUser == currentUserId)).ToList();
+            MarkMessagesAsRead(currentUserId);
         }
         public ContactsAndMessages(string currentUserId, ContactsContext contactsDb, UserManager<ApplicationUser> identityDb)
         {
@@ -90,6 +117,22 @@ namespace ChatApp.Models
         {
 
         }
+
+        private void MarkMessagesAsRead(string currentUserId)
+        {
+            for(int i = 0; i < Messages.Count; i++)
+            {
+                if (Messages[i].FromUser == SelectedContact.Id)
+                {
+                    MessagesContext db = new MessagesContext();
+                    var id=Messages[i].ID;
+                    var message = db.Messages.SingleOrDefault(x => x.ID == id);
+                    message.IsRead = true;
+                    db.SaveChanges();
+                }
+            }
+        }
+
 
         public string GetImageByContactUsername(string username)
         {

@@ -1,8 +1,13 @@
 ﻿@model ChatApp.Models.ContactsAndMessages
-<div class="col-sm-5 frame">
-    <h3 class="text-center" id="receiver_header">@if (Model.SelectedContact != null)
-    {@Model.SelectedContact.DisplayName;
-} </h3>
+<div class="col-sm-8 frame">
+
+    <span class="contacts-small">Contacts</span>
+    <h3 class="text-center" id="receiver_header">
+
+        @if (Model.SelectedContact != null)
+        {@Model.SelectedContact.DisplayName;
+    }
+    </h3>
     <ul id="messages"></ul>
     <div>
         <div class="msj-rta macro">

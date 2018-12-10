@@ -56,7 +56,7 @@ namespace ChatApp.Controllers
             }
             else
             {
-                Contact contact = contactsContext.Contacts.Where(x => x.UserId == contactUser.Id).FirstOrDefault();
+                Contact contact = contactsContext.Contacts.Where(x => x.UserId  == currentUserId && x.ContactId == contactUser.Id).FirstOrDefault();
                 if (contact != null)
                 {
                     contactsAndMessages.ErrorMessage = "The user you are trying to add is already in your contacts list!";
@@ -64,6 +64,7 @@ namespace ChatApp.Controllers
                 else
                 {
                     AddContact(contactUser.Id, currentUserId);
+                    contactsAndMessages = new ContactsAndMessages(currentUserId, contactsContext, this.UserManager);
                 }
                 
             }
@@ -79,6 +80,14 @@ namespace ChatApp.Controllers
             
             TempData["cam"] = contactsAndMessages;
             return RedirectToAction("Index","Messages");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(string userId)
+        {
+            Contact contact = new Contact(User.Identity.GetUserId(), userId);
+            contact.DeleteContact(new ContactsContext());
+            return RedirectToAction("Index", "Messages");
         }
 
         private void AddContact(string id, string currentUserId)
@@ -158,31 +167,8 @@ namespace ChatApp.Controllers
             return View(message);
         }
 
-        // GET: Messages/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Message message = db.Messages.Find(id);
-            if (message == null)
-            {
-                return HttpNotFound();
-            }
-            return View(message);
-        }
-
-        // POST: Messages/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Message message = db.Messages.Find(id);
-            db.Messages.Remove(message);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        
+        
 
         protected override void Dispose(bool disposing)
         {
